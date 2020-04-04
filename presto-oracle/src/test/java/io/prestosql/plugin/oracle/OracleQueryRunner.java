@@ -41,13 +41,25 @@ public final class OracleQueryRunner
         return createOracleQueryRunner(server, ImmutableList.of());
     }
 
-    public static QueryRunner createOracleQueryRunner(OracleServer server, TpchTable<?>... tables)
+    public static QueryRunner createOracleQueryRunner(OracleServer server, Iterable<TpchTable<?>> tables)
             throws Exception
     {
-        return createOracleQueryRunner(server, ImmutableList.copyOf(tables));
+        return createOracleQueryRunner(server, tables, false);
     }
 
-    public static QueryRunner createOracleQueryRunner(OracleServer server, Iterable<TpchTable<?>> tables)
+    public static QueryRunner createOraclePoolQueryRunner(OracleServer server)
+            throws Exception
+    {
+        return createOraclePoolQueryRunner(server, ImmutableList.of());
+    }
+
+    public static QueryRunner createOraclePoolQueryRunner(OracleServer server, Iterable<TpchTable<?>> tables)
+            throws Exception
+    {
+        return createOracleQueryRunner(server, tables, true);
+    }
+
+    private static QueryRunner createOracleQueryRunner(OracleServer server, Iterable<TpchTable<?>> tables, boolean connectionPoolEnable)
             throws Exception
     {
         DistributedQueryRunner queryRunner = null;
@@ -62,6 +74,7 @@ public final class OracleQueryRunner
             connectorProperties.putIfAbsent("connection-user", TEST_USER);
             connectorProperties.putIfAbsent("connection-password", TEST_PASS);
             connectorProperties.putIfAbsent("allow-drop-table", "true");
+            connectorProperties.putIfAbsent("oracle.connection-pool.enabled", String.valueOf(connectionPoolEnable));
 
             queryRunner.installPlugin(new OraclePlugin());
             queryRunner.createCatalog("oracle", "oracle", connectorProperties);

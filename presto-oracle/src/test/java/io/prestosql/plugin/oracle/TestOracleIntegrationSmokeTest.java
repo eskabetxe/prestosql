@@ -13,11 +13,15 @@
  */
 package io.prestosql.plugin.oracle;
 
+import com.google.common.collect.ImmutableList;
 import io.prestosql.testing.AbstractTestIntegrationSmokeTest;
 import io.prestosql.testing.MaterializedResult;
 import io.prestosql.testing.QueryRunner;
+import io.prestosql.tpch.TpchTable;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 import static io.prestosql.spi.type.VarcharType.VARCHAR;
 import static io.prestosql.testing.assertions.Assert.assertEquals;
@@ -33,7 +37,13 @@ public class TestOracleIntegrationSmokeTest
             throws Exception
     {
         oracleServer = new OracleServer();
-        return OracleQueryRunner.createOracleQueryRunner(oracleServer, ORDERS);
+        return createOracleQueryRunner(oracleServer, ImmutableList.of(ORDERS));
+    }
+
+    protected QueryRunner createOracleQueryRunner(OracleServer server, List<TpchTable<?>> tables)
+            throws Exception
+    {
+        return OracleQueryRunner.createOracleQueryRunner(server, tables);
     }
 
     @AfterClass(alwaysRun = true)

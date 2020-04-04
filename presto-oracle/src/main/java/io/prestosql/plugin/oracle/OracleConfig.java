@@ -28,6 +28,9 @@ public class OracleConfig
     private int varcharMaxSize = 4000;
     private int timestampDefaultPrecision = 6;
     private int numberDefaultScale = 10;
+    private boolean connectionPoolEnabled;
+    private int connectionPoolMinSize = 1;
+    private int connectionPoolMaxSize = 30;
     private RoundingMode numberRoundingMode = RoundingMode.HALF_UP;
 
     @NotNull
@@ -107,6 +110,45 @@ public class OracleConfig
     public OracleConfig setTimestampDefaultPrecision(int timestampDefaultPrecision)
     {
         this.timestampDefaultPrecision = timestampDefaultPrecision;
+        return this;
+    }
+
+    @NotNull
+    public boolean isConnectionPoolEnabled()
+    {
+        return connectionPoolEnabled;
+    }
+
+    @Config("oracle.connection-pool.enabled")
+    public OracleConfig setConnectionPoolEnabled(boolean connectionPoolEnabled)
+    {
+        this.connectionPoolEnabled = connectionPoolEnabled;
+        return this;
+    }
+
+    @Min(1)
+    public int getConnectionPoolMinSize()
+    {
+        return connectionPoolMinSize;
+    }
+
+    @Config("oracle.connection-pool.min-size")
+    public OracleConfig setConnectionPoolMinSize(int connectionPoolMinSize)
+    {
+        this.connectionPoolMinSize = connectionPoolMinSize;
+        return this;
+    }
+
+    @Min(1)
+    public int getConnectionPoolMaxSize()
+    {
+        return connectionPoolMaxSize;
+    }
+
+    @Config("oracle.connection-pool.max-size")
+    public OracleConfig setConnectionPoolMaxSize(int connectionPoolMaxSize)
+    {
+        this.connectionPoolMaxSize = connectionPoolMaxSize;
         return this;
     }
 }

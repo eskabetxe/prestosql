@@ -20,15 +20,11 @@ import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import io.prestosql.plugin.jdbc.BaseJdbcConfig;
 import io.prestosql.plugin.jdbc.ConnectionFactory;
-import io.prestosql.plugin.jdbc.DriverConnectionFactory;
 import io.prestosql.plugin.jdbc.ForBaseJdbc;
 import io.prestosql.plugin.jdbc.JdbcClient;
 import io.prestosql.plugin.jdbc.credential.CredentialProvider;
-import oracle.jdbc.OracleConnection;
-import oracle.jdbc.OracleDriver;
 
 import java.sql.SQLException;
-import java.util.Properties;
 
 import static io.airlift.configuration.ConfigBinder.configBinder;
 
@@ -46,16 +42,9 @@ public class OracleClientModule
     @Provides
     @Singleton
     @ForBaseJdbc
-    public static ConnectionFactory connectionFactory(BaseJdbcConfig config, CredentialProvider credentialProvider, OracleConfig oracleConfig)
+    public static ConnectionFactory connectionFactory(BaseJdbcConfig config, OracleConfig oracleConfig, CredentialProvider credentialProvider)
             throws SQLException
     {
-        Properties connectionProperties = new Properties();
-        connectionProperties.setProperty(OracleConnection.CONNECTION_PROPERTY_INCLUDE_SYNONYMS, String.valueOf(oracleConfig.isSynonymsEnabled()));
-
-        return new DriverConnectionFactory(
-                new OracleDriver(),
-                config.getConnectionUrl(),
-                connectionProperties,
-                credentialProvider);
+        return new OracleConnectorFactory(config, oracleConfig, credentialProvider);
     }
 }

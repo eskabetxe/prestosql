@@ -23,6 +23,25 @@ connection properties as appropriate for your setup:
     connection-user=root
     connection-password=secret
 
+Plugin Configuration
+^^^^^^^^^^^^^^^^^^^^
+The Oracle connector automatically uses connection pooling by default as a performance improvement.
+
+The default values, listed below, are typically a suitable configuration.
+They can be updated by changing the properties in the catalog configuration file:
+
+.. code-block:: none
+
+    oracle.connection-pool.max-size=30
+    oracle.connection-pool.min-size=1
+    oracle.connection-pool.inactive-timeout=20m
+
+If desired, connection pooling can also be disabled.
+
+.. code-block:: none
+
+    oracle.connection-pool.enabled=false
+
 Multiple Oracle Servers
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -57,6 +76,9 @@ Finally, you can access the ``clicks`` table in the ``web`` database::
 
 If you used a different name for your catalog properties file, use
 that catalog name instead of ``oracle`` in the above examples.
+
+Your privileges in these schemas are those of the user configured in the connection properties file.
+If the user does not have access to these tables, you will not be able to access them.
 
 Oracle Connector Limitations
 ----------------------------

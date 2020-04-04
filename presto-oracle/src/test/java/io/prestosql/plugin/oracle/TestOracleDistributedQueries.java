@@ -22,6 +22,7 @@ import io.prestosql.tpch.TpchTable;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -45,9 +46,13 @@ public class TestOracleDistributedQueries
             throws Exception
     {
         this.oracleServer = new OracleServer();
-        return OracleQueryRunner.createOracleQueryRunner(
-                oracleServer,
-                TpchTable.getTables());
+        return createOracleQueryRunner(oracleServer, TpchTable.getTables());
+    }
+
+    protected QueryRunner createOracleQueryRunner(OracleServer server, List<TpchTable<?>> tables)
+            throws Exception
+    {
+        return OracleQueryRunner.createOracleQueryRunner(server, tables);
     }
 
     @AfterClass(alwaysRun = true)
